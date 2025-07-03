@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, nativeTheme, Menu, shell } = require('electron');
 const path = require('path');
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise');''
 const bcrypt = require('bcryptjs');
 const { gerarResposta, obterRespostaGemini } = require(path.join(__dirname, 'src', 'views', 'gemini.js'));
 
@@ -8,6 +8,7 @@ const { gerarResposta, obterRespostaGemini } = require(path.join(__dirname, 'src
 const dbConfig = {
     host: 'localhost',
     user: 'root',
+    password: 'senacrs',
     database: 'db_bitbybit'
 };
 
@@ -25,7 +26,7 @@ async function createWindow() {
         console.error('Erro ao conectar ao banco de dados:', err);
     }
 
-    nativeTheme.themeSource = 'light'; // força o tema claro (poderia ser 'dark' ou 'system')
+    nativeTheme.themeSource = 'dark'; // força o tema claro (poderia ser 'dark' ou 'system')
 
     win = new BrowserWindow({
         width: 1000,
@@ -106,14 +107,6 @@ ipcMain.handle('login', async (event, { username, password }) => {
 // Quando o Electron estiver pronto, criamos a janela
 app.whenReady().then(() => {
     createWindow();
-
-    // Exemplo de uma caixa de mensagem que aparece assim que o app abre
-    const { dialog } = require('electron');
-    dialog.showMessageBox({
-        type: 'info',
-        title: 'Aviso',
-        message: 'Operação concluída com sucesso!'
-    });
 
     // Se o app for reaberto (ex: clicando no ícone do dock no macOS)
     app.on('activate', function () {
