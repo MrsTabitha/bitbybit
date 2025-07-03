@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, nativeTheme, Menu, shell } = require('electron');
 const path = require('path');
-const mysql = require('mysql2/promise');''
+const db = require('./db');
+
 const bcrypt = require('bcryptjs');
 const { gerarResposta, obterRespostaGemini } = require(path.join(__dirname, 'src', 'views', 'gemini.js'));
 
@@ -13,18 +14,13 @@ const dbConfig = {
 };
 
 let win;
-let dbConnection;
+
 
 // Função principal pra criar a janela da aplicação
 // Aqui a gente define tamanho, ícone, configurações de segurança e qual HTML será carregado
 async function createWindow() {
     // Conectar ao banco de dados
-    try {
-        dbConnection = await mysql.createConnection(dbConfig);
-        console.log('Conectado ao MySQL');
-    } catch (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-    }
+    
 
     nativeTheme.themeSource = 'dark'; // força o tema claro (poderia ser 'dark' ou 'system')
 
@@ -49,60 +45,45 @@ async function createWindow() {
 
 // IPC Handlers
 ipcMain.handle('register', async (event, { username, password }) => {
-    try {
-        // Verificar se usuário já existe
-        const [rows] = await dbConnection.execute(
-            'SELECT * FROM users WHERE username = ?',
-            [username]
-        );
-
-        if (rows.length > 0) {
-            return { success: false, message: 'Usuário já existe' };
-        }
-
-        // Hash da senha
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Inserir novo usuário
-        await dbConnection.execute(
-            'INSERT INTO users (username, password) VALUES (?, ?)',
-            [username, hashedPassword]
-        );
-
-        return { success: true, message: 'Usuário registrado com sucesso' };
-    } catch (err) {
-        console.error('Erro no registro:', err);
-        return { success: false, message: 'Erro no registro' };
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db('users').insert({ username, password: hashedPassword });
+    return { success: true };
+  } catch (error) {
+    console.error('Erro no registro:', error);
+    // Se for violação de chave única, por exemplo:
+    if (error.code === 'ER_DUP_ENTRY') {
+      return { success: false, message: 'Usuário já existe' };
     }
+    return { success: false, message: 'Erro interno no servidor' };
+  }
 });
+
 
 ipcMain.handle('login', async (event, { username, password }) => {
-    try {
-        // Buscar usuário
-        const [rows] = await dbConnection.execute(
-            'SELECT * FROM users WHERE username = ?',
-            [username]
-        );
+  try {
+    const user = await db('users').where({ username }).first();
+    if (!user) return { success: false, message: 'Usuário não encontrado' };
 
-        if (rows.length === 0) {
-            return { success: false, message: 'Usuário não encontrado' };
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      return {
+        success: true,
+        user: {
+          username: user.username,
+          id: user.id // se quiser passar também
         }
-
-        const user = rows[0];
-
-        // Verificar senha
-        const passwordMatch = await bcrypt.compare(password, user.password);
-
-        if (!passwordMatch) {
-            return { success: false, message: 'Senha incorreta' };
-        }
-
-        return { success: true, message: 'Login bem-sucedido', user: { id: user.id, username: user.username } };
-    } catch (err) {
-        console.error('Erro no login:', err);
-        return { success: false, message: 'Erro no login' };
+      };
+    } else {
+      return { success: false, message: 'Senha incorreta' };
     }
+  } catch (error) {
+    console.error('Erro no login:', error);
+    return { success: false, message: 'Erro interno no servidor' };
+  }
 });
+
+
 
 // Quando o Electron estiver pronto, criamos a janela
 app.whenReady().then(() => {
@@ -121,15 +102,10 @@ ipcMain.on('ir-para-chat', () => {
 
 // Fecha a aplicação quando todas as janelas forem fechadas (menos no macOS)
 app.on('window-all-closed', async () => {
-    // Fechar conexão com o banco de dados
-    if (dbConnection) {
-        await dbConnection.end();
-        console.log('Conexão com MySQL encerrada');
-    }
+   
 
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    await db.destroy();
+    console.log('Conexão com o banco finalizada via Knex');
 });
 
 // Handler que chama a função do Gemini pra gerar uma resposta a partir da pergunta
