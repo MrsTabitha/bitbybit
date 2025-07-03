@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App com Autenticação</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+</head>
+<body>
+    <div class="container" id="login-container">
+        <div class="icon">
+                <img src="../public/img/icone.png" alt="Icone-do-robo!" />
+            </div>
+            <h1 class="titulo">BitByBit</h1>
+            <p class="subtitulo">Decifrando o seu PC, peça por peça.</p>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" required autocomplete="current-password">
+            </div>
+            <button type="submit">Entrar</button>
+            <button type="button" id="show-register">Criar conta</button>
+        </form>
+        <div id="login-message"></div>
+    </div>
+
+
+    <!-- Container de Registro -->
+    <div class="container" id="register-container" style="display: none;">
+        <h1>Registrar</h1>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="new-username">Usuário</label>
+                <input type="text" id="new-username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="new-password">Senha</label>
+                <input type="password" id="new-password" required autocomplete="new-password">
+            </div>
+            <button type="submit">Registrar</button>
+            <button type="button" id="show-login">Voltar para login</button>
+        </form>
+        <div id="register-message"></div>
+    </div>
+
+    <!-- Dashboard/Chat -->
+    <div class="container" id="dashboard-container" style="display: none;">
+        <div class="chat-header">
+            <h1>Bem-vindo, <span id="dashboard-username"></span>!</h1>
+            <button id="logout-btn">Sair</button>
+        </div>
+        
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages"></div>
+            <form id="chat-form" class="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua mensagem..." autocomplete="off">
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

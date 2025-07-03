@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- evitar ataques de Cross Site Scripting (injeção de dados) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+    <title>Bit By Bit</title>
+    <link rel="shortcut icon" href="../public/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../public/css/style.css">
+</head>
+
+<body>
+    <!-- Container de Registro -->
+    <div class="container" id="register-container" style="display: none;">
+        <h1>Registrar</h1>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="new-username">Usuário</label>
+                <input type="text" id="new-username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="new-password">Senha</label>
+                <input type="password" id="new-password" required autocomplete="new-password">
+            </div>
+            <button type="submit">Registrar</button>
+            <button type="button" id="show-login">Voltar para login</button>
+        </form>
+        <div id="register-message"></div>
+    </div>
+    
+    <script src="renderer.js"></script>
+</body>
+
+</html>
