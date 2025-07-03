@@ -1,7 +1,7 @@
 {
-  "name": "rag",
+  "name": "bitbybit",
   "version": "1.0.0",
-  "description": "Trabalho Final Electron",
+  "description": "UC 10 - Gerenciamento da Configuração & Versionamento de Software. Kauê, Otávio e Talita",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -9,14 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MrsTabitha/RAG.git"
+    "url": "git+https://github.com/MrsTabitha/bitbybit"
   },
   "author": "Talita Müller",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MrsTabitha/RAG/issues"
+    "url": "https://github.com/MrsTabitha/bitbybit/issues"
   },
-  "homepage": "https://github.com/MrsTabitha/RAG#readme",
   "devDependencies": {
     "electron": "^36.5.0"
   },
