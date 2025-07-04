@@ -20,7 +20,7 @@ let win;
 // Aqui a gente define tamanho, ícone, configurações de segurança e qual HTML será carregado
 async function createWindow() {
     // Conectar ao banco de dados
-    
+
 
     nativeTheme.themeSource = 'dark'; // força o tema claro (poderia ser 'dark' ou 'system')
 
@@ -45,42 +45,42 @@ async function createWindow() {
 
 // IPC Handlers
 ipcMain.handle('register', async (event, { username, password }) => {
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await db('users').insert({ username, password: hashedPassword });
-    return { success: true };
-  } catch (error) {
-    console.error('Erro no registro:', error);
-    // Se for violação de chave única, por exemplo:
-    if (error.code === 'ER_DUP_ENTRY') {
-      return { success: false, message: 'Usuário já existe' };
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await db('users').insert({ username, password: hashedPassword });
+        return { success: true };
+    } catch (error) {
+        console.error('Erro no registro:', error);
+        // Se for violação de chave única, por exemplo:
+        if (error.code === 'ER_DUP_ENTRY') {
+            return { success: false, message: 'Usuário já existe' };
+        }
+        return { success: false, message: 'Erro interno no servidor' };
     }
-    return { success: false, message: 'Erro interno no servidor' };
-  }
 });
 
 
 ipcMain.handle('login', async (event, { username, password }) => {
-  try {
-    const user = await db('users').where({ username }).first();
-    if (!user) return { success: false, message: 'Usuário não encontrado' };
+    try {
+        const user = await db('users').where({ username }).first();
+        if (!user) return { success: false, message: 'Usuário não encontrado' };
 
-    const match = await bcrypt.compare(password, user.password);
-    if (match) {
-      return {
-        success: true,
-        user: {
-          username: user.username,
-          id: user.id // se quiser passar também
+        const match = await bcrypt.compare(password, user.password);
+        if (match) {
+            return {
+                success: true,
+                user: {
+                    username: user.username,
+                    id: user.id // se quiser passar também
+                }
+            };
+        } else {
+            return { success: false, message: 'Senha incorreta' };
         }
-      };
-    } else {
-      return { success: false, message: 'Senha incorreta' };
+    } catch (error) {
+        console.error('Erro no login:', error);
+        return { success: false, message: 'Erro interno no servidor' };
     }
-  } catch (error) {
-    console.error('Erro no login:', error);
-    return { success: false, message: 'Erro interno no servidor' };
-  }
 });
 
 
@@ -102,7 +102,7 @@ ipcMain.on('ir-para-chat', () => {
 
 // Fecha a aplicação quando todas as janelas forem fechadas (menos no macOS)
 app.on('window-all-closed', async () => {
-   
+
 
     await db.destroy();
     console.log('Conexão com o banco finalizada via Knex');
@@ -124,10 +124,10 @@ ipcMain.handle('generateResponse', async (event, message) => {
             "Ótimo ponto! Aqui está o que penso sobre isso...",
             "Estou processando sua solicitação. Um momento..."
         ];
-        
+
         // Simula um tempo de resposta
         await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-        
+
         return responses[Math.floor(Math.random() * responses.length)];
     } catch (err) {
         console.error('Erro ao gerar resposta:', err);
