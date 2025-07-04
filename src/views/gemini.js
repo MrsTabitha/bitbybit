@@ -1,8 +1,10 @@
+require('dotenv').config();
+
 // Importa a biblioteca oficial da Google para usar os modelos generativos (como o Gemini)
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Chave de API do Google Gemini
-const API_KEY = "AIzaSyBsQJC4kQc9OG8H9jqO0n_Zon6znnP8Ew0";
+const API_KEY = process.env.GEMINI_API_KEY;
 
 // Inicializa a instância da API com a chave
 const genAI = new GoogleGenerativeAI(API_KEY);
