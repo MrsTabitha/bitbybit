@@ -222,3 +222,20 @@ button[type="button"]:hover {
     color: #a0f0a0;
     border: 1px solid var(--accent-purple);
 }
+
+/* Icone */
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.icon img {
+  max-width: 250px;
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+}
+
