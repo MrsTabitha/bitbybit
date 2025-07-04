@@ -15,12 +15,12 @@
             <p class="subtitulo">Decifrando o seu PC, peça por peça.</p>
         <form id="login-form">
             <div class="form-group">
-                <label for="username">Usuário</label>
-                <input type="text" id="username" required autocomplete="username">
+                <label for="email">Email</label>
+                <input type="email" id="login-email" required autocomplete="email">
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" required autocomplete="current-password">
+                <input type="password" id="login-password" required autocomplete="current-password">
             </div>
             <button type="submit">Entrar</button>
             <button type="button" id="show-register">Criar conta</button>
@@ -35,11 +35,15 @@
         <form id="register-form">
             <div class="form-group">
                 <label for="new-username">Usuário</label>
-                <input type="text" id="new-username" required autocomplete="username">
+                <input type="text" id="username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="new-email">Email</label>
+                <input type="email" id="email" required autocomplete="email">
             </div>
             <div class="form-group">
                 <label for="new-password">Senha</label>
-                <input type="password" id="new-password" required autocomplete="new-password">
+                <input type="password" id="password" required autocomplete="new-password">
             </div>
             <button type="submit">Registrar</button>
             <button type="button" id="show-login">Voltar para login</button>
