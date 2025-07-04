@@ -44,44 +44,39 @@ async function createWindow() {
 }
 
 // IPC Handlers
-ipcMain.handle('register', async (event, { username, password }) => {
+ipcMain.handle('register', async (event, { username, email, password }) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        await db('users').insert({ username, password: hashedPassword });
-        return { success: true };
+        await db('users').insert({ username, email, password: hashedPassword });
+        return { success: true, message: 'Usuário registrado com sucesso!' };
     } catch (error) {
         console.error('Erro no registro:', error);
-        // Se for violação de chave única, por exemplo:
         if (error.code === 'ER_DUP_ENTRY') {
-            return { success: false, message: 'Usuário já existe' };
+            return { success: false, message: 'E-mail já está em uso.' };
         }
-        return { success: false, message: 'Erro interno no servidor' };
+        return { success: false, message: 'Erro interno no servidor.' };
     }
 });
 
 
-ipcMain.handle('login', async (event, { username, password }) => {
+
+ipcMain.handle('login', async (event, { email, password }) => {
     try {
-        const user = await db('users').where({ username }).first();
-        if (!user) return { success: false, message: 'Usuário não encontrado' };
+        const user = await db('users').where({ email }).first();
+        if (!user) return { success: false, message: 'E-mail não encontrado.' };
 
         const match = await bcrypt.compare(password, user.password);
         if (match) {
-            return {
-                success: true,
-                user: {
-                    username: user.username,
-                    id: user.id // se quiser passar também
-                }
-            };
+            return { success: true, user: { username: user.username, email: user.email } };
         } else {
-            return { success: false, message: 'Senha incorreta' };
+            return { success: false, message: 'Senha incorreta.' };
         }
     } catch (error) {
         console.error('Erro no login:', error);
-        return { success: false, message: 'Erro interno no servidor' };
+        return { success: false, message: 'Erro interno no servidor.' };
     }
 });
+
 
 
 

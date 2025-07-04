@@ -32,11 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Submissão do formulário de login
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
 
         try {
-            const result = await window.electronAPI.login({ username, password });
+            const result = await window.electronAPI.login({ email, password });
 
             if (result.success) {
                 showDashboard(result.user);
@@ -49,14 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
     // Submissão do formulário de registro
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const username = document.getElementById('new-username').value;
-        const password = document.getElementById('new-password').value;
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+
 
         try {
-            const result = await window.electronAPI.register({ username, password });
+            const result = await window.electronAPI.register({ username, email, password });
 
             if (result.success) {
                 showMessage(registerMessage, result.message, true);
@@ -93,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Solicita resposta ao backend
             const response = await window.api.gerarResposta(message);
-            
+
             // Atualiza a mensagem com a resposta real
             thinkingMsg.textContent = response;
         } catch (err) {
@@ -111,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginContainer.style.display = 'none';
         registerContainer.style.display = 'none';
         dashboardContainer.style.display = 'block';
-        
+
         // Foca no input do chat quando o dashboard é mostrado
         chatInput.focus();
     }
@@ -128,10 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
         messageDiv.classList.add('message', className);
         messageDiv.textContent = content;
         chatMessages.appendChild(messageDiv);
-        
+
         // Rolagem automática
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        
+
         return messageDiv;
     }
 });
