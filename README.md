@@ -56,7 +56,12 @@ Siga os passos abaixo para configurar e executar o projeto em sua máquina local
     <!-- end list -->
 
     ```
-    API_KEY=SUA_CHAVE_API_AQUI
+    DB_HOST=
+    DB_USER=
+    DB_PASSWORD=
+    DB_NAME=
+
+    GEMINI_API_KEY=
     ```
 
 5.  **Inicie a aplicação:**
