@@ -8,7 +8,6 @@ O **Bit by Bit** é um projeto de chatbot desenvolvido como parte da Unidade Cur
 
   * **Interface de Chat:** Interface gráfica simples e intuitiva para interação com o usuário.
   * **Integração com IA:** Respostas dinâmicas e contextuais geradas pela API do Google Gemini.
-  * **Armazenamento de Histórico:** (Sugestão, baseado nos arquivos de banco de dados) O chat salva o histórico de conversas para consulta.
   * **Testes:** O projeto inclui testes de caixa branca para garantir a qualidade do código.
 
 ## 💻 Tecnologias Utilizadas
