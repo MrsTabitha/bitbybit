@@ -97,11 +97,15 @@ ipcMain.on('ir-para-chat', () => {
 
 // Fecha a aplicação quando todas as janelas forem fechadas (menos no macOS)
 app.on('window-all-closed', async () => {
-
-
     await db.destroy();
     console.log('Conexão com o banco finalizada via Knex');
+
+    // Encerra o app de verdade
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
 });
+
 
 // Handler que chama a função do Gemini pra gerar uma resposta a partir da pergunta
 ipcMain.handle('gerar-resposta', async (event, mensagem) => {
